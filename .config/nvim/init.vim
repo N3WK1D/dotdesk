@@ -1,0 +1,9 @@
+set number
+set ruler
+set showmatch
+syntax on
+set mouse=a
+set mouse=v
+set cursorline
+set autoindent
+set expandtab
