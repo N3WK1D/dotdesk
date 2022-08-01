@@ -1,4 +1,4 @@
-set number
+set number relativenumber
 set ruler
 set showmatch
 syntax on
