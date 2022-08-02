@@ -55,8 +55,12 @@ theme = themes[1]
 modkey = "Mod4"
 altkey = "Mod1"
 terminal = "alacritty"
-editor = os.getenv("EDITOR") or "vim"
-browser = "brave"
+editor = "nvim"
+brave = "brave"
+mplayer = "ncmpcpp"
+vimwikiindex = "VimwikiIndex"
+vimwiki = terminal .. " -e " .. editor .. " -c " .. vimwikiindex
+ncmpcpp = terminal .. " -e " .. mplayer
 
 beautiful.init(string.format("%s/.config/awesome/themes/%s/theme.lua", os.getenv("HOME"), theme))
 
@@ -187,16 +191,6 @@ globalkeys = gears.table.join(
         end,
         {description = "go back", group = "client"}),
 
-    -- Focus restored client
-    awful.key({ modkey, "Shift" }, "n",
-        function ()
-            local c = awful.client.restore()
-            if c then
-                c:emit_signal("request::activate", "key.unminimize", {raise = true})
-            end
-        end,
-        {description = "restore minimized", group = "client"}),
-
     -- Standard program
     awful.key({ modkey,           }, "Return", function () awful.spawn(terminal) end,
               {description = "open a terminal", group = "launcher"}),
@@ -223,23 +217,29 @@ globalkeys = gears.table.join(
     awful.key({ modkey, "Shift"   }, "space", function () awful.layout.inc(-1)                end,
               {description = "select previous", group = "layout"}),
 
-    -- dmenu
-    --awful.key({ modkey }, "r", function () awful.util.spawn("dmenu_run") end,
-    --          {description = "launch dmenu", group = "custom"}),
     -- rofi
     awful.key({ modkey }, "r", function () os.execute(string.format("rofi -show %s -theme %s", 'run', 'dmenu')) end,
-              {description = "show rofi", group = "launcher"}),
-    -- Brave
-    awful.key({ modkey }, "b", function () awful.util.spawn(browser) end,
-              {description = "launch brave", group = "launcher"}),
-    -- Menubar
+              {description = "show run prompt", group = "launcher"}),
+    -- menubar
     awful.key({ modkey }, "p", function() menubar.show() end,
               {description = "show the menubar", group = "launcher"}),
+
+    -- brave
+    awful.key({ modkey, altkey }, "b", function () awful.spawn(brave) end,
+              {description = "launch brave", group = "launcher"}),
+    -- ncmpcpp
+    awful.key({ modkey, altkey }, "m", function() awful.spawn(ncmpcpp) end,
+              {description = "launch ncmpcpp", group = "launcher"}), 
+    -- vimwiki
+    awful.key({ modkey, altkey }, "w", function() awful.spawn(vimwiki) end,
+              {description = "launch vimwiki", group = "launcher"}),
+
     -- Screen brightness
     awful.key({ }, "XF86MonBrightnessUp", function () os.execute("doas xbacklight -inc 10") end,
               {description = "+10%", group = "hotkeys"}),
     awful.key({ }, "XF86MonBrightnessDown", function () os.execute("doas xbacklight -dec 10") end,
               {description = "-10%", group = "hotkeys"}),
+    
     -- ALSA volume control
     awful.key({ }, "XF86AudioRaiseVolume", function () os.execute("amixer -q sset Master 1%+") end,
 	      {description = "volume up", group = "hotkeys"}),
@@ -247,6 +247,7 @@ globalkeys = gears.table.join(
 	      {description = "volume down", group = "hotkeys"}),
 --    awful.key({ }, "XF86AudioMute", function () os.execute("amixer -q set Master 1+ toggle") end,
 --	      {description = "toggle mute", group = "hotkeys"}),
+    
     -- Media Keys
     awful.key({ }, "XF86AudioPlay", function () os.execute("playerctl play-pause") end,
 	      {description = "toggle play/pause", group = "hotkeys"}),
@@ -278,6 +279,15 @@ clientkeys = gears.table.join(
             c.minimized = true
         end ,
         {description = "minimize", group = "client"}),
+    -- Focus restored client
+    awful.key({ modkey, "Shift" }, "n",
+        function ()
+            local c = awful.client.restore()
+            if c then
+                c:emit_signal("request::activate", "key.unminimize", {raise = true})
+            end
+        end,
+        {description = "restore minimized", group = "client"}),
     awful.key({ modkey,           }, "m",
         function (c)
             c.maximized = not c.maximized
@@ -371,14 +381,20 @@ root.keys(globalkeys)
 awful.rules.rules = {
     -- All clients will match this rule.
     { rule = { },
-      properties = { border_width = beautiful.border_width,
-                     border_color = beautiful.border_normal,
-                     focus = awful.client.focus.filter,
+      properties = { focus = awful.client.focus.filter,
                      raise = true,
                      keys = clientkeys,
                      buttons = clientbuttons,
                      screen = awful.screen.preferred,
                      placement = awful.placement.no_overlap+awful.placement.no_offscreen
+     }
+    },
+
+    -- Polybar rules.
+    { rule_any = { instance = { "polybar" } },
+      properties = { 
+                     border_width = 0,
+                     focusable = false
      }
     },
 
@@ -433,9 +449,6 @@ client.connect_signal("manage", function (c)
         awful.placement.no_offscreen(c)
     end
 end)
-
--- Gaps
-beautiful.useless_gap = 3
 
 -- Autostart
 awful.spawn.with_shell("$HOME/.config/polybar/launch.sh")

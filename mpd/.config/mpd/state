@@ -1,7 +1,7 @@
 sw_volume: 100
 audio_device_state:1:My ALSA Device
 state: stop
-current: 4
+current: 14
 random: 0
 repeat: 0
 single: 0
@@ -23,4 +23,6 @@ playlist_begin
 10:Wiz Khalifa - Blacc Hollywood [Deluxe] (2014)/13 True Colors (ft. Nicki Minaj).mp3
 11:Wiz Khalifa - Blacc Hollywood [Deluxe] (2014)/14 We Dem Boyz (ft. Rick Ross, ScHoolboy Q & Nas) [Remix].mp3
 12:Wiz Khalifa - Blacc Hollywood [Deluxe] (2014)/15 You & Your Friends (ft. Snoop Dogg & Ty Dolla $ign).mp3
+13:Wiz Khalifa - Blacc Hollywood [Deluxe] (2014)/05 House In The Hills (ft. Curren$y).mp3
+14:Wiz Khalifa - Blacc Hollywood [Deluxe] (2014)/06 Ass Drop.mp3
 playlist_end
