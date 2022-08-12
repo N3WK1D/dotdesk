@@ -1,0 +1,3 @@
+# Launch music player
+super + alt + m
+        alacritty -e ncmpcpp

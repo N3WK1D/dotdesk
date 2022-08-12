@@ -12,14 +12,14 @@
 ## ncmpcpp.
 ##
 #
-ncmpcpp_directory = ~/.ncmpcpp
+ncmpcpp_directory = ~/.local/share/ncmpcpp
 #
 ##
 ## Directory for storing downloaded lyrics. It defaults to ~/.lyrics since other
 ## MPD clients (eg. ncmpc) also use that location.
 ##
 #
-lyrics_directory = ~/.ncmpcpp/lyrics
+lyrics_directory = ~/.local/share/ncmpcpp/lyrics
 #
 ##### connection settings #####
 #
@@ -69,7 +69,7 @@ mpd_music_dir = ~/Music
 ## visualizer.
 ##
 #
-#visualizer_data_source = /tmp/mpd.fifo
+visualizer_data_source = /tmp/mpd.fifo
 #
 ##
 ## Note: Below parameter is needed for ncmpcpp to determine which output
@@ -77,12 +77,12 @@ mpd_music_dir = ~/Music
 ## to synchronize with audio.
 ##
 #
-#visualizer_output_name = Visualizer feed
+visualizer_output_name = Visualizer feed
 #
 ##
 ## If you set format to 44100:16:2, make it 'yes'.
 ##
-#visualizer_in_stereo = yes
+visualizer_in_stereo = yes
 #
 ##
 ## Note: set below to >=10 only if you have synchronization issues with
