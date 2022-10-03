@@ -40,4 +40,6 @@ pipewire &
 pipewire-pulse &
 wireplumber &
 picom &
+sxhkd &
+redshift &
 exec awesome

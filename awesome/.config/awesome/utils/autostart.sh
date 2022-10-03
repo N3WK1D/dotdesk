@@ -11,4 +11,3 @@ fi
 
 run "polybar" "main"
 run "conky"
-run "mpd"

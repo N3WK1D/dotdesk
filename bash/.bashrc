@@ -3,7 +3,7 @@
 #
 
 # Get current status of git repo
-function parse_git_status {
+parse_git_status() {
 declare status="$(git status 2>&1 | tee)"
 declare dirty="$(echo -n "${status}" 2> /dev/null | grep "modified:" &> /dev/null; echo "$?")"
 declare untracked="$(echo -n "${status}" 2> /dev/null | grep "Untracked files" &> /dev/null; echo "$?")"
@@ -12,43 +12,23 @@ declare newfile="$(echo -n "${status}" 2> /dev/null | grep "new file:" &> /dev/n
 declare renamed="$(echo -n "${status}" 2> /dev/null | grep "renamed:" &> /dev/null; echo "$?")"
 declare deleted="$(echo -n "${status}" 2> /dev/null | grep "deleted:" &> /dev/null; echo "$?")"
 declare bits=''
-if [[ "${renamed}" -eq 0 ]]; then bits="*${bits}"; fi
-if [[ "${ahead}" -eq 0 ]]; then bits=">${bits}"; fi
-if [[ "${newfile}" -eq 0 ]]; then bits="+${bits}"; fi
-if [[ "${untracked}" -eq 0 ]]; then bits="?${bits}"; fi
-if [[ "${deleted}" -eq 0 ]]; then bits="-${bits}"; fi
-if [[ "${dirty}" -eq 0 ]]; then bits="!${bits}"; fi
-if [[ ! "${bits}" == "" ]]; then echo " ${bits}"; else echo ""; fi
+[[ "${deleted}" -eq 0 ]] && bits="-${bits}"
+[[ "${renamed}" -eq 0 ]] && bits="*${bits}"
+[[ "${newfile}" -eq 0 ]] && bits="+${bits}"
+[[ "${ahead}" -eq 0 ]] && bits=">${bits}"
+[[ "${untracked}" -eq 0 ]] && bits="?${bits}"
+[[ "${dirty}" -eq 0 ]] && bits="!${bits}"
+[[ -n "${bits}" ]] && echo -n " ${bits}" || echo -n ""
 }
 
 # Get current git branch
-function parse_git_branch() {
+parse_git_branch() {
 declare BRANCH="$(git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/')"
-if [[ -n "${BRANCH}" ]]; then
-	STAT="$(parse_git_status)"
-	echo -e "[\e[33m${BRANCH}${STAT}\e[m]"
-else
-	echo ""
-fi
+[[ -n "${BRANCH}" ]] && { STAT="$(parse_git_status)"; echo -ne "-[\e[33m${BRANCH}${STAT}\e[m]"; } || echo -n ""
 }
 
 # Set command prompt
 export PS1="[\[\e[36m\]\t\[\e[m\]]-[\[\e[32m\]\u\[\e[m\]\[\e[32m\]@\[\e[m\]\[\e[32m\]\h\[\e[m\]]-[\[\e[35m\]\W\[\e[m\]]\$(parse_git_branch)\n\\$> "
-
-# Set umask
-umask 027
-
-# Preferred text editor
-export EDITOR=nvim
-
-# Limit .bash_history memory to session only
-export HISTFILESIZE=0
-
-# Increase session history cache
-export HISTSIZE=1000000
-
-# Ignore duplicates and commands starting with a space
-export HISTCONTROL='ignoreboth'
 
 # Enable dynamic line wrap
 shopt -s checkwinsize
@@ -70,9 +50,13 @@ alias lt='ls -lARh --color=auto | grep "$1"'
 alias gs='git status'
 alias ga='git add'
 alias gc='git commit'
-alias gco='git checkout'
 alias gb='git branch'
+alias gbc='git checkout'
 alias gpl='git pull'
 alias gph='git push'
-alias light='openrgb -p Norm.orp'
-alias dark='openrgb -p dark.orp'
+alias b1='doas rc-service bluetoothd start && doas rfkill unblock bluetooth'
+alias b0='doas rfkill block bluetooth && doas rc-service bluetoothd stop'
+alias w1='doas rfkill unblock wifi'
+alias w0='doas rfkill block wifi'
+alias l1='openrgb -p Norm.orp'
+alias l0='openrgb -p dark.orp'

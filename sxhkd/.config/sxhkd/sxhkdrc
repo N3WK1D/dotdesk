@@ -1,3 +1,60 @@
-# Launch music player
+# SXHKD is a daemon that listens to keyboard events and execute commands.
+# The valid modifier names are: super, hyper, meta, alt, control, ctrl, shift, mode_switch, lock, mod1, mod2, mod3, mod4, mod5 and any.
+
+# Power controls
+super + ctrl + p
+        loginctl poweroff
+
+super + ctrl + shift + p
+        loginctl reboot
+
+# Lockscreen controls
+super + ctrl + l
+        slock
+
+# Brightness controls
+XF86MonBrightnessUp
+        xbacklight -inc 5
+
+XF86MonBrightnessDown
+        xbacklight -dec 5
+
+# Volume controls
+XF86AudioRaiseVolume
+        pactl set-sink-volume @DEFAULT_SINK@ +5%
+
+XF86AudioLowerVolume
+        pactl set-sink-volume @DEFAULT_SINK@ -5%
+
+XF86AudioMute
+        pactl set-sink-mute @DEFAULT_SINK@ toggle
+
+# Media controls
+XF86AudioPlay
+        playerctl play-pause
+
+XF86AudioNext
+        playerctl next
+
+XF86AudioPrev
+        playerctl previous
+
+# Screenshot controls
+super + Print
+        scrot '~/Pictures/screenshots/%Y-%m-%d_%T.png'
+
+super + shift + Print
+        scrot -s '~/Pictures/screenshots/%Y-%m-%d_%T.png'
+
+# Launch terminal
+super + alt + space
+	alacritty
+	
+super + alt + e
+	alacritty -e nvim
+	
 super + alt + m
-        alacritty -e ncmpcpp
+	alacritty -e ncmpcpp
+	
+super + alt + b
+	brave

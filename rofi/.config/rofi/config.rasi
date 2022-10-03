@@ -1,0 +1,14 @@
+configuration {
+    display-window: "Windows";
+    display-drun: "Apps";
+    display-run: "Run";
+    display-combi: "All";
+    drun-display-format: "{icon} {name}";
+    show-icons: true;
+    disable-history: true;
+    combi-modes: "window,drun,run";
+    modi: "combi,window,drun,run";
+    window { close-on-delete: false; }
+}
+
+@theme "/home/ray/.config/rofi/theme/main.rasi"

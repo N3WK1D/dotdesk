@@ -7,6 +7,7 @@ local xresources = require("beautiful.xresources")
 local dpi = xresources.apply_dpi
 local gfs = require("gears.filesystem")
 local themes_path = string.format("%s/.config/awesome/themes/main/", os.getenv("HOME"))
+
 local wallpaper = "yin-yang.jpg"
 local wallpaper_path = themes_path.."wallpaper/"
 local icons_path = themes_path.."icons/"
@@ -62,8 +63,14 @@ theme.notification_opacity = theme.opacity
 -- menu_[bg|fg]_[normal|focus]
 -- menu_[border_color|border_width]
 theme.menu_submenu_icon = icons_path.."submenu.png"
-theme.menu_height = dpi(15)
-theme.menu_width  = dpi(100)
+theme.menu_height = dpi(16)
+theme.menu_width  = dpi(120)
+theme.menu_bg_normal = theme.color_black
+theme.menu_bg_focus = theme.color_custom_main
+theme.menu_fg_normal = theme.color_white
+theme.menu_fg_focus = theme.color_black
+theme.menu_border_width = dpi(1)
+theme.menu_border_color = theme.border_focus
 
 -- Variables set for theming the hotkeys window:
 -- hotkeys_[bg|fg|border_width|border_color|shape|opacity|modifiers_fg|label_bg|label_fg|group_margin|font|description_font]
