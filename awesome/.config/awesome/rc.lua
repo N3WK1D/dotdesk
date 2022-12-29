@@ -21,27 +21,13 @@ require("awful.hotkeys_popup.keys")
 -- {{{ Error handling
 -- Check if awesome encountered an error during startup and fell back to
 -- another config (This code will only ever execute for the fallback config)
-if awesome.startup_errors then
-    naughty.notify({ preset = naughty.config.presets.critical,
-                     title = "Oops, there were errors during startup!",
-                     text = awesome.startup_errors })
-end
-
--- Handle runtime errors after startup
-do
-    local in_error = false
-    awesome.connect_signal("debug::error", function (err)
-        -- Make sure we don't go into an endless error loop
-        if in_error then return end
-        in_error = true
-
-        naughty.notify({ preset = naughty.config.presets.critical,
-                         title = "Oops, an error happened!",
-                         text = tostring(err) })
-        in_error = false
-    end)
-end
--- }}}
+naughty.connect_signal("request::display_error", function(message, startup)
+    naughty.notification {
+        urgency = "critical",
+        title   = "Oops, an error happened"..(startup and " during startup!" or "!"),
+        message = message
+    }
+end)
 
 -- {{{ Variable definitions
 
@@ -61,11 +47,11 @@ beautiful.init(string.format("%s/.config/awesome/themes/%s/theme.lua", os.getenv
 awful.layout.layouts = {
     awful.layout.suit.tile,
     awful.layout.suit.tile.left,
+    layouts.centered,
     awful.layout.suit.tile.bottom,
     awful.layout.suit.tile.top,
-    layouts.centered,
     awful.layout.suit.max,
-    awful.layout.suit.floating,
+    --awful.layout.suit.floating,
 }
 -- }}}
 
@@ -86,9 +72,9 @@ systemmenu = {
 }
 
 appimagemenu = {
-    { "Bitwarden", "Bitwarden-2022.8.1-x86_64.AppImage" },
+    { "Bitwarden", "Bitwarden-2022.8.1.AppImage" },
     { "Obsidian", "Obsidian-0.15.9.AppImage" },
-    { "Session", "session-desktop-linux-x86_64-1.10.0.AppImage" },
+    { "Session", "Session-1.10.1.AppImage" },
 }
 
 mymainmenu = menu.build({
@@ -123,12 +109,52 @@ awful.screen.connect_for_each_screen(function(s)
     -- Wallpaper
     set_wallpaper(s)
     -- Each screen has its own tag table
-    awful.tag({ "1", "2", "3", "4" }, s, awful.layout.layouts[1])
+    awful.tag({ "1", "2", "3", "4", "5", "6", "7", "8", "9" }, s, awful.layout.layouts[1])
 end)
 
 -- Set master client to 60% of screen
 master_width = 0.6
 beautiful.master_width_factor = master_width
+-- }}}
+
+-- {{{ Titlebars
+-- Add a titlebar if titlebars_enabled is set to true in the rules.
+client.connect_signal("request::titlebars", function(c)
+    -- buttons for the titlebar
+    local buttons = {
+        awful.button({ }, 1, function()
+            c:activate { context = "titlebar", action = "mouse_move"  }
+        end),
+        awful.button({ }, 3, function()
+            c:activate { context = "titlebar", action = "mouse_resize"}
+        end),
+    }
+
+    awful.titlebar(c).widget = {
+        { -- Left
+            awful.titlebar.widget.iconwidget(c),
+            buttons = buttons,
+            layout  = wibox.layout.fixed.horizontal
+        },
+        { -- Middle
+            { -- Title
+                align  = "center",
+                widget = awful.titlebar.widget.titlewidget(c)
+            },
+            buttons = buttons,
+            layout  = wibox.layout.flex.horizontal
+        },
+        { -- Right
+            awful.titlebar.widget.floatingbutton (c),
+            awful.titlebar.widget.maximizedbutton(c),
+            awful.titlebar.widget.stickybutton   (c),
+            awful.titlebar.widget.ontopbutton    (c),
+            awful.titlebar.widget.closebutton    (c),
+            layout = wibox.layout.fixed.horizontal()
+        },
+        layout = wibox.layout.align.horizontal
+    }
+end)
 -- }}}
 
 -- {{{ Signals

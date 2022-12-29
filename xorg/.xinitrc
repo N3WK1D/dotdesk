@@ -32,10 +32,7 @@ if [ -d /etc/X11/xinit/xinitrc.d ] ; then
  unset f
 fi
 
-# User programs
-if [[ -z "$SSH_AUTH_SOCK" ]]; then
-    eval $(ssh-agent)
-fi
+# User X programs
 pipewire &
 pipewire-pulse &
 wireplumber &

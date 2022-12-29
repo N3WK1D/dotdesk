@@ -3,14 +3,14 @@
 #
 
 # Set umask
-umask 137
+umask 027
 
 # Set bash options
 export HISTFILESIZE=0
 export HISTCONTROL="ignoreboth"
 
 # Set PATH variable
-export PATH="/usr/local/sbin:/usr/local/bin:/local/bin:${HOME}/.local/bin"
+export PATH="${PATH}:${HOME}/.local/bin"
 
 # Set EDITOR variable
 export EDITOR="nvim"
@@ -25,6 +25,9 @@ export XDG_CONFIG_DIRS="${XDG_CONFIG_HOME}:/etc/xdg"
 
 # Source ~/.bashrc if found
 [[ -f ~/.bashrc ]] && source ~/.bashrc
+
+# Start ssh-agent
+[[ -z "$SSH_AUTH_SOCK" ]] && eval $(ssh-agent -s) &> /dev/null
 
 # Autostart X11 on tty1
 if shopt -q login_shell; then

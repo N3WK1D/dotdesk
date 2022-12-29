@@ -1,3 +1,4 @@
+set cmdheight=0
 set laststatus=2
 set noshowmode
 set number relativenumber
@@ -18,12 +19,11 @@ set termguicolors
 
 " Vim-plug
 call plug#begin()
-Plug 'vimwiki/vimwiki'
 Plug 'itchyny/lightline.vim'
 Plug 'ap/vim-css-color'
-Plug 'navarasu/onedark.nvim'
-Plug 'lucasprag/simpleblack'
 Plug 'ayu-theme/ayu-vim'
+Plug 'ggandor/leap.nvim'
+"Plug 'vimwiki/vimwiki'
 call plug#end()
 
 filetype indent on
@@ -31,10 +31,6 @@ filetype plugin indent on
 syntax on
 
 " Colorscheme config
-let g:onedark_config = {
-    \ 'style': 'warmer',
-    \ }
-
 let ayucolor = "dark"
 colorscheme ayu
 
@@ -49,3 +45,9 @@ let g:lightline = {
       \              [ 'filetype' ] ]
       \ },
       \ }
+
+" VimWiki config
+"let g:vimwiki_list = [{'path': '~/Sync/vimwiki'}]
+
+" Leap config
+lua require('leap').add_default_mappings()

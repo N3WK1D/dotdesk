@@ -28,8 +28,16 @@ awful.rules.rules = {
       properties = { border_width = 0,
                      focusable = false,
                      floating = true,
-                     hidden = false
-     }
+                     ontop = true,
+                     hidden = true
+      }
+    },
+    
+    -- Brave picture-in-picture
+    { rule_any = { name = { "Picture-in-picture" } },
+      properties = { floating = true,
+      		     placement = awful.placement.bottom_right+awful.placement.no_offscreen
+      }
     },
 
     -- Floating clients.
@@ -49,20 +57,26 @@ awful.rules.rules = {
           "Tor Browser", -- Needs a fixed window size to avoid fingerprinting by screen size.
           "Wpa_gui",
           "veromix",
-          "xtightvncviewer"},
-
+          "xtightvncviewer"
+        },
         -- Note that the name property shown in xprop might be set slightly after creation of the client
         -- and the name shown there might not match defined rules here.
         name = {
           "Event Tester",  -- xev.
-          "Picture-in-picture", -- brave picture-in-picture
+          "File Operation Progress",
         },
         role = {
           "AlarmWindow",  -- Thunderbird's calendar.
           "ConfigManager",  -- Thunderbird's about:config.
           "pop-up",       -- e.g. Google Chrome's (detached) Developer Tools.
+          "GtkFileChooserDialog",
         }
-      }, properties = { floating = true }},
+      },
+      properties = { floating = true,
+      		     titlebars_enabled = true,
+      		     placement = awful.placement.centered
+      }
+    },
 
     -- Set Firefox to always map on the tag named "2" on screen 1.
     -- { rule = { class = "Firefox" },

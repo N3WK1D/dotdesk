@@ -1,17 +1,6 @@
 # SXHKD is a daemon that listens to keyboard events and execute commands.
 # The valid modifier names are: super, hyper, meta, alt, control, ctrl, shift, mode_switch, lock, mod1, mod2, mod3, mod4, mod5 and any.
 
-# Power controls
-super + ctrl + p
-        loginctl poweroff
-
-super + ctrl + shift + p
-        loginctl reboot
-
-# Lockscreen controls
-super + ctrl + l
-        slock
-
 # Brightness controls
 XF86MonBrightnessUp
         xbacklight -inc 5
@@ -58,3 +47,9 @@ super + alt + m
 	
 super + alt + b
 	brave
+
+super + v
+    copyq menu
+
+super + alt + v
+    copyq

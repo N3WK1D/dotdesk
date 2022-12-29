@@ -1,6 +1,7 @@
 local awful = require("awful")
 local naughty = require("naughty")
 local gears = require("gears")
+local menubar = require("menubar")
 --local beautiful = require("beautiful")
 local hotkeys_popup = require("awful.hotkeys_popup")
 -- Enable hotkeys help widget for VIM and other apps
@@ -46,7 +47,13 @@ keys.globalkeys = gears.table.join(
               {description = "reload awesome", group = "awesome"}),
     awful.key({ modkey, "Control" }, "q", awesome.quit,
               {description = "quit awesome", group = "awesome"}),
-
+    awful.key({ modkey, "Control" }, "p", function () awful.spawn("loginctl poweroff") end,
+              {description = "power off", group = "awesome"}),
+    awful.key({ modkey, "Control", "Shift" }, "p", function () awful.spawn("loginctl reboot") end,
+              {description = "reboot", group = "awesome"}),
+    awful.key({ modkey, "Control" }, "x", function () awful.spawn("slock") end,
+              {description = "lock", group = "awesome"}),
+              
     -- Standard commands
     awful.key({ modkey }, "w", function () mymainmenu:show() end,
               {description = "show main menu", group = "awesome"}),
@@ -80,9 +87,9 @@ keys.globalkeys = gears.table.join(
         {description = "return to previous client", group = "client"}),
 
     -- Index control
-    awful.key({ modkey, "Shift" }, "j", function () awful.client.swap.byidx( 1) end,
+    awful.key({ modkey }, "l", function () awful.client.swap.byidx( 1) end,
               {description = "swap with next client by index", group = "client"}),
-    awful.key({ modkey, "Shift" }, "k", function () awful.client.swap.byidx(-1) end,
+    awful.key({ modkey }, "h", function () awful.client.swap.byidx(-1) end,
               {description = "swap with previous client by index", group = "client"}),
 
     -- Master client control
@@ -90,10 +97,15 @@ keys.globalkeys = gears.table.join(
               {description = "increase master width factor", group = "layout"}),
     awful.key({ modkey, "Control" }, "h", function () awful.tag.incmwfact(-0.05) end,
               {description = "decrease master width factor", group = "layout"}),
-    awful.key({ modkey, "Control" }, "m", function () awful.screen.focused().selected_tag.master_width_factor = 0.5 end,
+    awful.key({ modkey, "Control" }, "space",
+        function ()
+            if awful.screen.focused().selected_tag.master_width_factor == master_width then
+                awful.screen.focused().selected_tag.master_width_factor = 0.5
+            elseif awful.screen.focused().selected_tag.master_width_factor == 0.5 then
+                awful.screen.focused().selected_tag.master_width_factor = master_width
+            end
+        end,
               {description = "set master width factor to 50%", group = "layout"}),
-    awful.key({ modkey, "Control", "Shift" }, "m", function () awful.screen.focused().selected_tag.master_width_factor = master_width end,
-              {description = "reset master width factor", group = "layout"}),
 
     -- Column control 
     awful.key({ modkey, "Control" }, "k", function () awful.tag.incncol( 1, nil, true) end,
@@ -121,6 +133,7 @@ keys.globalkeys = gears.table.join(
         end,
               {description = "restore minimized", group = "client"}),
 
+    -- Toggle conky visibility
     awful.key({ modkey }, "`",
         function ()
             local conky = function (c) return awful.rules.match(c, {class = "conky"}) end
